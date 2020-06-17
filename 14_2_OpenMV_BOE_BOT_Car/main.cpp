@@ -1,14 +1,18 @@
 #include"mbed.h"
 
 Serial pc(USBTX,USBRX); //tx,rx
-Serial uart(D1,D0); //tx,rx
+Serial uart(D12,D11); //tx,rx
 
 int main(){
    uart.baud(9600);
-   while(1){
-      if(uart.readable()){
-            char recv = uart.getc();
-            pc.putc(recv);
-      }
-   }
+   char buf[1000]={0};
+   while(uart.readable()){
+      for (int i=0; ; i++) {
+          char recv = uart.getc();
+          if (recv == '\r') {
+            break;}
+        buf[i] = pc.putc(recv);
+        }
+        wait(0.1);
+    }
 }
